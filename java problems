@@ -1,0 +1,52 @@
+import java.util.*;
+
+class Solution {
+    public int mirrorFrequency(String s) {
+        int ans = 0;
+
+        HashMap<Character, Integer> mpp = new HashMap<>();
+
+        // Step 1: Frequency count
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            mpp.put(ch, mpp.getOrDefault(ch, 0) + 1);
+        }
+
+        HashSet<Character> visited = new HashSet<>();
+
+        // Step 2: Process each unique character
+        for (char ch : mpp.keySet()) {
+
+            if (visited.contains(ch)) continue;
+
+            int val = mpp.get(ch);
+            char mirror;
+
+            // Case 1: lowercase letters
+            if (ch >= 'a' && ch <= 'z') {
+                mirror = (char) ('z' - (ch - 'a'));
+            }
+            // Case 2: digits
+            else if (ch >= '0' && ch <= '9') {
+                mirror = (char) ('9' - (ch - '0'));
+            }
+            // Other characters (optional handling)
+            else {
+                ans += val;
+                continue;
+            }
+
+            if (mpp.containsKey(mirror)) {
+                int mv = mpp.get(mirror);
+                ans += Math.abs(val - mv);
+                visited.add(mirror);
+            } else {
+                ans += val;
+            }
+
+            visited.add(ch);
+        }
+
+        return ans;
+    }
+}
